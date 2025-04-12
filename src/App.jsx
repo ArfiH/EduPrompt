@@ -8,6 +8,18 @@ import Footer from "./component/Footer";
 function App() {
   return (
     <div className="app-container min-h-screen bg-gray-200">
+      <Header />
+      <main className="mt-[-2rem]">
+        <BrowserRouter>
+          <Routes>
+            <Route index element={<Home />} />
+            <Route path="video/:id" element={<Video />} />
+            <Route path="result/:query" element={<Home />} />
+          </Routes>
+        </BrowserRouter>
+      </main>
+      <Footer />
+
     </div>
   );
 }
