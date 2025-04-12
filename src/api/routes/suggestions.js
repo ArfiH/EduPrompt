@@ -25,7 +25,7 @@ router.get('/', async (req, res) => {
 
   try {
     const response = await fetch(url);
-    const buffer = await response.arrayBuffer();
+    const buffer = await response.buffer();
     const text = buffer.toString('utf-8');
 
     const jsonStart = text.indexOf('[');

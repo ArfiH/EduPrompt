@@ -15,51 +15,29 @@ const groq = new Groq({
   dangerouslyAllowBrowser: true,
 });
 
-/**
- * Queries the Groq API to generate a quiz based on a video title and description.
- *
- * @param {string} videoTitle The title of the video.
- * @param {string} videoDescription The description of the video.
- */
+
+export async function getSummary(videoTitle, videoDescription, caption) {
+  const prompt = `Based on this youtube video, ${videoTitle}, description: ${videoDescription}. Transcript of this video:
+    ${caption}. Generate a summary.
+    Your output should use the following template:
+    ### Summary
+    ### Analogy
+    ### Notes
+    - [Emoji] Bulletpoint
+    ### Keywords
+    - Explanation and examples`;
+
+  const chatCompletion = await getGroqChatCompletion(prompt);
+  // Print the completion returned by the LLM.
+  console.log(chatCompletion.choices[0]?.message?.content);
+  return chatCompletion.choices[0]?.message?.content;
+}
+
 export async function getQuizByTitle(videoTitle, videoDescription) {
-  const chatCompletion = await getGroqChatCompletion(
-    videoTitle,
-    videoDescription
-  );
-  // Print the completion returned by the LLM.
-  console.log(chatCompletion.choices[0]?.message?.content);
-  return chatCompletion.choices[0]?.message?.content;
-}
-
-export async function getQuizBySummary(videoTitle, videoDescription, caption) {
-  const chatCompletion = await getGroqChatCompletion(
-    videoTitle,
-    videoDescription,
-    caption
-  );
-  // Print the completion returned by the LLM.
-  console.log(chatCompletion.choices[0]?.message?.content);
-  return chatCompletion.choices[0]?.message?.content;
-}
-
-/**
- * Gets the Groq chat completion for a given video title and description.
- *
- * @param {string} videoTitle The title of the video.
- * @param {string} videoDescription The description of the video.
- * @returns {Promise} A promise resolving to the chat completion response.
- */
-export async function getGroqChatCompletion(
-  videoTitle,
-  videoDescription,
-  caption
-) {
-  try {
-    const prompt = `
+  const prompt = `
       You are an AI that generates a quiz based on video content. Create 5 Hard level multiple-choice questions about the following video:
       Title: ${videoTitle}
       Description: ${videoDescription}
-      ${caption ? "Details: " + caption : ""}
 
       Format the response as:
       [
@@ -72,6 +50,45 @@ export async function getGroqChatCompletion(
         ...
       ]
     `;
+  const chatCompletion = await getGroqChatCompletion(prompt);
+  // Print the completion returned by the LLM.
+  console.log(chatCompletion.choices[0]?.message?.content);
+  return chatCompletion.choices[0]?.message?.content;
+}
+
+export async function getQuizByCaption(videoTitle, videoDescription, caption) {
+  const prompt = `
+      You are an AI that generates a quiz based on video content. Create 5 Hard level multiple-choice questions about the following video:
+      Title: ${videoTitle}
+      Description: ${videoDescription}
+      Details: ${caption}
+
+      Format the response as:
+      [
+        {
+        "question": "Question 1",
+		"questionType": "text",
+        "options": ["Option 1", "Option 2", "Option 3", "Option 4"],
+        "answer": "Correct Option"
+        },
+        ...
+      ]
+    `;
+  const chatCompletion = await getGroqChatCompletion(prompt);
+  // Print the completion returned by the LLM.
+  console.log(chatCompletion.choices[0]?.message?.content);
+  return chatCompletion.choices[0]?.message?.content;
+}
+
+/**
+ * Gets the Groq chat completion for a given video title and description.
+ *
+ * @param {string} videoTitle The title of the video.
+ * @param {string} videoDescription The description of the video.
+ * @returns {Promise} A promise resolving to the chat completion response.
+ */
+export async function getGroqChatCompletion(prompt) {
+  try {
     console.info(prompt);
     return await groq.chat.completions.create({
       messages: [

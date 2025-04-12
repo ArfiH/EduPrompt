@@ -5,7 +5,7 @@ import ReactPlayer from "react-player";
 import TipTapEditor from "../component/TipTapEditor";
 import Recommendations from "../component/Recommendations";
 import Extras from "../component/Extras";
-
+import "./splitPaneStyles.css";
 import "./Video.css";
 
 import {
@@ -14,12 +14,12 @@ import {
   getVideoByID,
 } from "../api/youtube";
 
-import { getQuizBySummary, getQuizByTitle } from "../api/groq";
-
+import { getQuizByCaption, getQuizByTitle, getSummary } from "../api/groq";
+import SplitPane from "react-split-pane";
 
 const getSubtitles = async (videoId) => {
   const res = await axios.get(`http://localhost:5000/api/subtitles/${videoId}`);
-  console.log('Response while fetching subtitles: ' + res.data);
+  console.log("Response while fetching subtitles: " + res.data);
   return res.data.subtitles;
 };
 
@@ -32,29 +32,38 @@ function Video() {
   const { id } = useParams();
   const [video, setVideo] = useState("");
   const [quiz, setQuiz] = useState([]);
-  const [loadQuiz, setLoadQuiz] = useState(false);
+  const [summary, setSummary] = useState('');
+  const [extraActiveIndex, setExtraActiveIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
-  const [summary, setSummary] = useState("");
+  const [caption, setCaption] = useState("");
   const [noteTitle, setNoteTitle] = useState("My Note");
 
-  async function handleLoadQuiz(title, description) {
-    try {
-      //   let quizData = [];
-      //   setTimeout(() => {
-      //     quizData = dummyQuizData;
-      //     setQuiz(quizData);
-      //     console.log(quizData);
-      //     setLoadQuiz(true);
-      //   }, 1000);
+  // ---------------Extras Active Index values------------------------
+  // 0 -> Summary
+  // 1 -> Quiz 
+  // 2 -> Help
+  // 3 -> Flashcards
+  // -----------------------------------------------------------------
 
-      // To generate quiz based on only title and description
-      //   let quizData = await getQuizByTitle(title, description);
-      // console.log(summary);
-      let quizData = await getQuizBySummary(title, description, summary);
+  async function handleLoadSummary(title, description) {
+    setExtraActiveIndex(0);
+    try {
+      const summaryData = await getSummary(title, description, caption);
+      console.log('Generated summary: ' + summaryData);
+      setSummary(summaryData);
+    }
+    catch(e) {
+      console.log('Error fetching Summary from AI. ' + e.message);
+    }
+  }
+
+  async function handleLoadQuiz(title, description) {
+    setExtraActiveIndex(1);
+    try {
+      let quizData = await getQuizByCaption(title, description, caption);
       quizData = JSON.parse(quizData);
       setQuiz(quizData);
       console.log(quizData);
-      setLoadQuiz(true);
     } catch (error) {
       console.log(error);
     }
@@ -83,91 +92,88 @@ function Video() {
       console.log("Fetched Captions:", caption);
 
       // send only the first 17000 characters to groq otherwise Token per minute exceeded error will be thrown
-      setSummary(caption.substring(0, 17000));
+      setCaption(caption.substring(0, 17000));
     });
   }, []);
 
   if (isLoading) return <p>Loading...</p>;
 
   return (
-    //   <div className="main-conatiner">
-    //     <div className="grid-container grid grid-cols-1 lg:grid-cols-2">
-    //       <div className="video-container bg-white rounded-2xl px-8 py-4 m-2">
-    //         <ReactPlayer
-    //           className="max-w-[640px]"
-    //           width="100%"
-    //           url={`<https://www.youtube.com/watch?v=${id}>`}
-    //           controls
-    //         />
-    //         <div className="video-description">
-    //           <h3 className="font-semibold">{video.snippet.title}</h3>
-    //           {/* <p>{video.snippet.description}</p> */}
-    //           <p>{video.snippet.channelTitle}</p>
-    //           <div className="flex-conatiner flex justify-between items-center">
-    //             <p>⏲ {video.contentDetails.duration}</p>
-    //             <p>📽 {video.statistics.viewCount}</p>
-    //             <p>👍🏻 {video.statistics.likeCount}</p>
-    //             <p>♥ {video.statistics.favouriteCount || 0}</p>
-    //           </div>
-    //         </div>
-    //       </div>
-    //       <div className="sidebar-container bg-white rounded-2xl px-6 py-4 m-2">
-    //         <TipTapEditor />
-    //       </div>
-    //     </div>
-
-    //     {loadQuiz && quiz && quiz?.length > 0 ? (
-    //       <CustomQuiz quiz={quiz} />
-    //     ) : (
-    //       <button
-    //         type="button"
-    //         className="m-4 text-primary px-4 py-2 font-bold rounded-2xl bg-accent cursor-pointer"
-    //         onClick={() =>
-    //           handleLoadQuiz(video.snippet.title, video.snippet.description)
-    //         }
-    //       >
-    //         Load Quiz
-    //       </button>
-    //     )}
-    //   </div>
-    // );
-
     <>
       <main>
         <div className="container">
           <div className="content-wrapper">
-            <div className="video-section mt-8">
-              <ReactPlayer
-                className="max-w-[640px]"
-                width="100%"
-                url={`<https://www.youtube.com/watch?v=${id}>`}
-                controls
-              />
-              <div className="video-info">
-                <h1 className="video-title">{video.snippet.title}</h1>
-                <div className="video-meta">
-                  <span>{video.statistics.viewCount}</span>
-                  <span>•</span>
-                  <span>{video.statistics.likeCount} likes</span>
-                  <span>•</span>
-                  <span>Video by {video.snippet.channelTitle}</span>
+            <SplitPane
+              performanceMode={true}
+              style={{ position: "static", marginBottom: "-2.96rem" }}
+              split="vertical"
+              defaultSize="50%"
+            >
+              <div className="video-section mt-8 min-w-20">
+                <ReactPlayer
+                  className="aspect-video"
+                  width="100%"
+                  height="100%"
+                  url={`<https://www.youtube.com/watch?v=${id}>`}
+                  controls
+                />
+                <div className="video-info">
+                  <h1 className="video-title">{video.snippet.title}</h1>
+                  <div className="video-meta">
+                    <span>{video.statistics.viewCount}</span>
+                    <span>•</span>
+                    <span>{video.statistics.likeCount} likes</span>
+                    <span>•</span>
+                    <span>Video by {video.snippet.channelTitle}</span>
+                  </div>
+                  <p>{video.snippet.description.slice(0, 160)}...</p>
                 </div>
-                <p>{video.snippet.description.slice(0, 160)}...</p>
               </div>
-            </div>
 
-            <div className="notes-container mt-8">
-              <div className="notes-header">
-                <input type="text" onChange={e => setNoteTitle(e.target.value)} value={noteTitle}></input>
-                <button className="btn btn-outline">Save</button>
+              <div className="notes-container mt-8">
+                <div className="notes-header">
+                  <input
+                    type="text"
+                    onChange={(e) => setNoteTitle(e.target.value)}
+                    value={noteTitle}
+                  ></input>
+                  <button className="btn btn-outline">Save</button>
+                </div>
+                <div className="notes-editor">
+                  <TipTapEditor />
+                </div>
               </div>
-              <div className="notes-editor">
-                <TipTapEditor />
-              </div>
-            </div>
+            </SplitPane>
           </div>
 
           <div className="ai-tools">
+          <div
+              className="ai-tool-btn mt-4"
+              onClick={() =>
+                handleLoadSummary(
+                  video.snippet.title,
+                  video.snippet.description
+                )
+              }
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="16" x2="12" y2="12"></line>
+                <line x1="12" y1="8" x2="12.01" y2="8"></line>
+              </svg>
+              <span>AI Summary</span>
+            </div>
+
             <div
               className="ai-tool-btn mt-4"
               onClick={() =>
@@ -192,24 +198,6 @@ function Video() {
               <span>AI Quiz</span>
             </div>
 
-            <div className="ai-tool-btn mt-4">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <circle cx="12" cy="12" r="10"></circle>
-                <line x1="12" y1="16" x2="12" y2="12"></line>
-                <line x1="12" y1="8" x2="12.01" y2="8"></line>
-              </svg>
-              <span>AI Summary</span>
-            </div>
             <div className="ai-tool-btn mt-4">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -247,7 +235,7 @@ function Video() {
             </div>
           </div>
 
-          {loadQuiz && <Extras isQuiz={loadQuiz} quiz={quiz}  />}
+          <Extras activeIndex={extraActiveIndex} quiz={quiz} summary={summary} />
           <Recommendations />
         </div>
       </main>

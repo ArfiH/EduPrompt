@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Results from "./Results";
+import Results from "../Results";
 
 function CustomQuiz({ quiz }) {
   const [currQuestion, setCurrQuestion] = useState(0);

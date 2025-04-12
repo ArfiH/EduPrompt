@@ -32,9 +32,9 @@ function Results({ yourAnswers, quiz }) {
                       viewBox="0 0 24 24"
                       fill="none"
                       stroke="green"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
                       class="lucide lucide-circle-check-big-icon lucide-circle-check-big"
                     >
                       <path d="M21.801 10A10 10 0 1 1 17 3.335" />
@@ -48,9 +48,9 @@ function Results({ yourAnswers, quiz }) {
                       viewBox="0 0 24 24"
                       fill="none"
                       stroke="red"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
                       class="lucide lucide-circle-x-icon lucide-circle-x"
                     >
                       <circle cx="12" cy="12" r="10" />
