@@ -35,7 +35,7 @@ function Results({ yourAnswers, quiz }) {
                       strokeWidth="2"
                       strokeLinecap="round"
                       strokeLinejoin="round"
-                      class="lucide lucide-circle-check-big-icon lucide-circle-check-big"
+                      className="lucide lucide-circle-check-big-icon lucide-circle-check-big"
                     >
                       <path d="M21.801 10A10 10 0 1 1 17 3.335" />
                       <path d="m9 11 3 3L22 4" />
@@ -51,7 +51,7 @@ function Results({ yourAnswers, quiz }) {
                       strokeWidth="2"
                       strokeLinecap="round"
                       strokeLinejoin="round"
-                      class="lucide lucide-circle-x-icon lucide-circle-x"
+                      className="lucide lucide-circle-x-icon lucide-circle-x"
                     >
                       <circle cx="12" cy="12" r="10" />
                       <path d="m15 9-6 6" />

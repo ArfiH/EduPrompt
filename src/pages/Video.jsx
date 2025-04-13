@@ -235,7 +235,7 @@ function Video() {
             </div>
           </div>
 
-          <Extras activeIndex={extraActiveIndex} quiz={quiz} summary={summary} />
+          <Extras index={extraActiveIndex} setIndex={setExtraActiveIndex} quiz={quiz} summary={summary} />
           <Recommendations />
         </div>
       </main>
