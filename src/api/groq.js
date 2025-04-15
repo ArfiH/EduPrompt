@@ -18,13 +18,15 @@ const groq = new Groq({
 
 export async function getSummary(videoTitle, videoDescription, caption) {
   const prompt = `Based on this youtube video, ${videoTitle}, description: ${videoDescription}. Transcript of this video:
-    ${caption}. Generate a summary.
-    Your output should use the following template:
-    ### Summary
-    ### Analogy
-    ### Notes
+    ${caption}. Generate complete notes covering all the key concepts with examples, analogy and follow up questions with proper markdown.
+    Format notes as:
+    ## Summary
+    ## Analogy
+    \`code\`
+    > definitions
+    ## Notes
     - [Emoji] Bulletpoint
-    ### Keywords
+    ## Keywords
     - Explanation and examples`;
 
   const chatCompletion = await getGroqChatCompletion(prompt);

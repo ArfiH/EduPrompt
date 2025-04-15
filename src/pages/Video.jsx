@@ -9,8 +9,6 @@ import "./splitPaneStyles.css";
 import "./Video.css";
 
 import {
-  getCaptionbyVideoId,
-  getCaptionId,
   getVideoByID,
 } from "../api/youtube";
 

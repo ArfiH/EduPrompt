@@ -94,6 +94,7 @@ function Home() {
           </div>
         </div> */}
 
+        {/* Change it to last viewed video and write continue where you left */}
         {/* Featured Video Section (shows only if there's a featured video) */}
         {featuredVideo && (
           <div className="mb-12">
@@ -151,52 +152,6 @@ function Home() {
                 <h3 className="font-medium text-gray-800">{category}</h3>
               </div>
             ))}
-          </div>
-        </div>
-
-        {/* Video Grid Section */}
-        <div>
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-2xl font-bold text-gray-800">Recommended Videos</h2>
-            <button className="text-blue-600 hover:text-blue-800 font-medium">View All</button>
-          </div>
-          
-          {isLoading ? (
-            <div className="flex justify-center py-20">
-              <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
-            </div>
-          ) : filteredVideos.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-              {filteredVideos.map((vid) => <Card key={vid.etag} video={vid} />)}
-            </div>
-          ) : (
-            <div className="text-center py-16">
-              <div className="text-5xl mb-4">🔍</div>
-              <h3 className="text-xl font-medium text-gray-700 mb-2">No videos found</h3>
-              <p className="text-gray-500">Try different search terms or browse our categories</p>
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* Newsletter Section */}
-      <div className="bg-blue-50 py-12 mt-16">
-        <div className="container mx-auto px-4 md:px-8">
-          <div className="max-w-2xl mx-auto text-center">
-            <h2 className="text-2xl font-bold mb-4 text-gray-800">Stay Updated with New Content</h2>
-            <p className="text-gray-600 mb-6">
-              Subscribe to our newsletter and get notified about new educational videos and learning resources.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-2">
-              <input 
-                type="email" 
-                placeholder="Enter your email address" 
-                className="flex-grow py-3 px-4 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-              <button className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-6 rounded-lg transition duration-300">
-                Subscribe
-              </button>
-            </div>
           </div>
         </div>
       </div>

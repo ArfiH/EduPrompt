@@ -8,7 +8,7 @@ function Footer() {
         <div className="footer-content">
           <div className="footer-about">
             <a href="#" className="footer-logo">
-              Edu<span>Learn</span>
+              Edu<span>Prompt</span>
             </a>
             <p>
               EduLearn is a modern educational platform offering high-quality
@@ -91,48 +91,11 @@ function Footer() {
               <li>
                 <a href="#">Browse Courses</a>
               </li>
-              <li>
-                <a href="#">Pricing</a>
-              </li>
-              <li>
-                <a href="#">Become an Instructor</a>
-              </li>
-              <li>
-                <a href="#">Blog</a>
-              </li>
-            </ul>
-          </div>
-          <div className="footer-links">
-            <h3 className="footer-heading">Support</h3>
-            <ul>
-              <li>
-                <a href="#">Help Center</a>
-              </li>
-              <li>
-                <a href="#">Contact Us</a>
-              </li>
-              <li>
-                <a href="#">FAQs</a>
-              </li>
-              <li>
-                <a href="#">Privacy Policy</a>
-              </li>
-              <li>
-                <a href="#">Terms of Service</a>
-              </li>
-            </ul>
-          </div>
-          <div className="footer-links">
-            <h3 className="footer-heading">Contact</h3>
-            <ul>
-              <li>info@edulearn.com</li>
-              <li>+1 (555) 123-4567</li>
-              <li>123 Learning Street, Education City, 10001</li>
             </ul>
           </div>
         </div>
         <div className="copyright">
-          <p>&copy; 2025 EduLearn. All rights reserved.</p>
+          <p>EduLearn</p>
         </div>
       </div>
     </footer>

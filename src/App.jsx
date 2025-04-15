@@ -4,6 +4,7 @@ import Header from "./component/Header";
 import Home from "./pages/Home";
 import Video from "./pages/Video";
 import Footer from "./component/Footer";
+import SearchResult from "./pages/SearchResult";
 import Test from "./pages/Test";
 
 function App() {
@@ -15,7 +16,7 @@ function App() {
           <Routes>
             <Route index element={<Home />} />
             <Route path="video/:id" element={<Video />} />
-            <Route path="result/:query" element={<Home />} />
+            <Route path="result/:query" element={<SearchResult />} />
             <Route path="test" element={<Test />} />
           </Routes>
         </BrowserRouter>

@@ -36,46 +36,4 @@ const getVideoByID = async (id) => {
   return res.data.items[0];
 };
 
-const getCaptionId = async (videoId) => {
-  const newKey = apiKeys[currKey++ % apiKeys.length];
-  const res = await axios.get(`${BASE_URL}/captions`, {
-    params: {
-      part: "id, snippet",
-      videoId: videoId,
-      key: newKey,
-    },
-  });
-  const allCaptionsId = res.data.items;
-  console.log(allCaptionsId);
-  const englishCaptionId = allCaptionsId.filter(
-    (item) => item.snippet.language === "en"
-  );
-  console.log(englishCaptionId);
-  return englishCaptionId;
-};
-
-const getCaptionbyVideoId = async (videoId) => {
-  const options = {
-    method: "GET",
-    url: "https://youtube-transcript3.p.rapidapi.com/api/transcript",
-    params: {
-      videoId: videoId,
-    },
-    headers: {
-      "x-rapidapi-key": "255f9920c2msh89ddfc9c47b3409p102cd7jsn36aac328a025",
-      "x-rapidapi-host": "youtube-transcript3.p.rapidapi.com",
-    },
-  };
-
-  try {
-    const response = await axios.request(options);
-    console.log(response.data);
-
-    // return flattened transcript array
-    return response.data.transcript.flat(4);
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-export { getVideos, getVideoByID, getCaptionId, getCaptionbyVideoId };
+export { getVideos, getVideoByID };
