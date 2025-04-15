@@ -8,11 +8,9 @@ import Extras from "../component/Extras";
 import "./splitPaneStyles.css";
 import "./Video.css";
 
-import {
-  getVideoByID,
-} from "../api/youtube";
+import { getVideoByID } from "../api/youtube";
 
-import { getQuizByCaption, getQuizByTitle, getSummary } from "../api/groq";
+import { getQuizByCaption, getSummary, getHelpByCaption } from "../api/groq";
 import SplitPane from "react-split-pane";
 
 const getSubtitles = async (videoId) => {
@@ -30,7 +28,8 @@ function Video() {
   const { id } = useParams();
   const [video, setVideo] = useState("");
   const [quiz, setQuiz] = useState([]);
-  const [summary, setSummary] = useState('');
+  const [summary, setSummary] = useState("");
+  const [help, setHelp] = useState(null);
   const [extraActiveIndex, setExtraActiveIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [caption, setCaption] = useState("");
@@ -38,7 +37,7 @@ function Video() {
 
   // ---------------Extras Active Index values------------------------
   // 0 -> Summary
-  // 1 -> Quiz 
+  // 1 -> Quiz
   // 2 -> Help
   // 3 -> Flashcards
   // -----------------------------------------------------------------
@@ -47,11 +46,10 @@ function Video() {
     setExtraActiveIndex(0);
     try {
       const summaryData = await getSummary(title, description, caption);
-      console.log('Generated summary: ' + summaryData);
+      console.log("Generated summary: " + summaryData);
       setSummary(summaryData);
-    }
-    catch(e) {
-      console.log('Error fetching Summary from AI. ' + e.message);
+    } catch (e) {
+      console.log("Error fetching Summary from AI. " + e.message);
     }
   }
 
@@ -65,6 +63,11 @@ function Video() {
     } catch (error) {
       console.log(error);
     }
+  }
+
+  async function handleLoadHelp(title, description) {
+    setExtraActiveIndex(2);
+    setHelp({title, description, caption});
   }
 
   useEffect(() => {
@@ -109,7 +112,7 @@ function Video() {
             >
               <div className="video-section mt-8 min-w-20">
                 <ReactPlayer
-                  className="aspect-video"
+                  className="aspect-video rounded-xl overflow-hidden"
                   width="100%"
                   height="100%"
                   url={`<https://www.youtube.com/watch?v=${id}>`}
@@ -145,7 +148,7 @@ function Video() {
           </div>
 
           <div className="ai-tools">
-          <div
+            <div
               className="ai-tool-btn mt-4"
               onClick={() =>
                 handleLoadSummary(
@@ -196,7 +199,12 @@ function Video() {
               <span>AI Quiz</span>
             </div>
 
-            <div className="ai-tool-btn mt-4">
+            <div
+              className="ai-tool-btn mt-4"
+              onClick={() =>
+                handleLoadHelp(video.snippet.title, video.snippet.description)
+              }
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
@@ -233,7 +241,13 @@ function Video() {
             </div>
           </div>
 
-          <Extras index={extraActiveIndex} setIndex={setExtraActiveIndex} quiz={quiz} summary={summary} />
+          <Extras
+            index={extraActiveIndex}
+            setIndex={setExtraActiveIndex}
+            quiz={quiz}
+            summary={summary}
+            help={help}
+          />
           <Recommendations />
         </div>
       </main>
