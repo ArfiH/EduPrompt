@@ -35,6 +35,30 @@ export async function getSummary(videoTitle, videoDescription, caption) {
   return chatCompletion.choices[0]?.message?.content;
 }
 
+export async function getFlashcards(videoTitle, videoDescription, caption) {
+  const prompt = `Based on this youtube video, ${videoTitle}, description: ${videoDescription}. Transcript of this video:
+    ${caption}. Generate flashcards notes covering all the key concepts. 
+    Format the response as:
+      [
+        {
+          id: 1,
+          Question: 'question text',
+          Answer: 'answer text'  
+        },
+        {
+          id: 2,
+          Question: 'question text',
+          Answer: 'answer text'  
+        },
+      ...]
+    `;
+
+  const chatCompletion = await getGroqChatCompletion(prompt);
+  // Print the completion returned by the LLM.
+  console.log(chatCompletion.choices[0]?.message?.content);
+  return chatCompletion.choices[0]?.message?.content;
+}
+
 export async function getQuizByTitle(videoTitle, videoDescription) {
   const prompt = `
       You are an AI that generates a quiz based on video content. Create 5 Hard level multiple-choice questions about the following video:

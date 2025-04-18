@@ -10,7 +10,7 @@ import "./Video.css";
 
 import { getVideoByID } from "../api/youtube";
 
-import { getQuizByCaption, getSummary, getHelpByCaption } from "../api/groq";
+import { getQuizByCaption, getSummary, getHelpByCaption, getFlashcards } from "../api/groq";
 import SplitPane from "react-split-pane";
 
 const getSubtitles = async (videoId) => {
@@ -30,6 +30,7 @@ function Video() {
   const [quiz, setQuiz] = useState([]);
   const [summary, setSummary] = useState("");
   const [help, setHelp] = useState(null);
+  const [flashcards, setFlashcards] = useState(null);
   const [extraActiveIndex, setExtraActiveIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [caption, setCaption] = useState("");
@@ -67,7 +68,19 @@ function Video() {
 
   async function handleLoadHelp(title, description) {
     setExtraActiveIndex(2);
-    setHelp({title, description, caption});
+    setHelp({ title, description, caption });
+  }
+
+  async function handleLoadFlashcard(title, description) {
+    setExtraActiveIndex(3);
+    try {
+      let flashcardData = await getFlashcards(title, description, caption);
+      // flashcardData = JSON.parse(flashcardData);
+      setFlashcards(flashcardData);
+      console.log(flashcardData);
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   useEffect(() => {
@@ -220,7 +233,12 @@ function Video() {
               </svg>
               <span>AI Help</span>
             </div>
-            <div className="ai-tool-btn mt-4">
+            <div
+              className="ai-tool-btn mt-4"
+              onClick={() =>
+                handleLoadFlashcard(video.snippet.title, video.snippet.description)
+              }
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
@@ -247,6 +265,7 @@ function Video() {
             quiz={quiz}
             summary={summary}
             help={help}
+            flashcards={flashcards}
           />
           <Recommendations />
         </div>

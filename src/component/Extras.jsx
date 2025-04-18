@@ -2,8 +2,9 @@ import React, {useState} from "react";
 import CustomQuiz from "./ExtraComponents/CustomQuiz";
 import Summary from "./ExtraComponents/Summary";
 import GroqChat from "./ExtraComponents/GroqChat";
+import Flashcard from "./ExtraComponents/Flashcard";
 
-function Extras({ index, setIndex, quiz, summary, help}) {
+function Extras({ index, setIndex, quiz, summary, help, flashcards}) {
   
   return (
     <div className="extras-container mt-8 relative">
@@ -67,6 +68,9 @@ function Extras({ index, setIndex, quiz, summary, help}) {
         ) : null}
         {index === 2 ? (
           <GroqChat help={help} />
+        ) : null}
+        {index === 3 && flashcards?.length > 0 ? (
+          <Flashcard flashcards={flashcards} />
         ) : null}
       </div>
     </div>

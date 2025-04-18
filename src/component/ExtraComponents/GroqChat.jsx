@@ -32,9 +32,6 @@ export default function GroqChat({ help }) {
     );
   };
 
-  useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
 
   // Focus input on component mount
   useEffect(() => {
@@ -166,7 +163,7 @@ export default function GroqChat({ help }) {
   };
 
   return (
-    <div className="flex flex-col h-screen bg-gray-50">
+    <div className="flex flex-col h-[80vh] bg-gray-50">
       {/* Header */}
       <header className="bg-white border-b border-gray-200 p-4">
         <div className="flex justify-between items-center max-w-4xl mx-auto">
