@@ -37,7 +37,7 @@ export async function getSummary(videoTitle, videoDescription, caption) {
 
 export async function getFlashcards(videoTitle, videoDescription, caption) {
   const prompt = `Based on this youtube video, ${videoTitle}, description: ${videoDescription}. Transcript of this video:
-    ${caption}. Generate flashcards notes covering all the key concepts. 
+    ${caption}. Generate flashcards notes as array of objects covering all the key concepts. 
     Format the response as:
       [
         {

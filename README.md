@@ -6,7 +6,7 @@
 
 ## 📌 Problem Statement
 
-**Problem Statement 8 – Build Personalized Learning Aids with AI**
+**Personalized Learning solution with AI**
 
 ---
 

@@ -75,8 +75,14 @@ function Video() {
     setExtraActiveIndex(3);
     try {
       let flashcardData = await getFlashcards(title, description, caption);
-      // flashcardData = JSON.parse(flashcardData);
-      setFlashcards(flashcardData);
+      flashcardData = flashcardData.slice(flashcardData.indexOf('['));
+      const jsonString = flashcardData
+      .replace(/([{,]\s*)(\w+):/g, '$1"$2":') // Add quotes around property names
+      .replace(/'/g, '"');                     // Replace single quotes with double quotes
+
+    // Parse the JSON string to create an array of objects
+    const flashcardsArray = JSON.parse(jsonString);
+      setFlashcards(flashcardsArray);
       console.log(flashcardData);
     } catch (error) {
       console.log(error);
