@@ -28,7 +28,7 @@ function SearchResult() {
   }, []);
 
   return (
-    <div className="search-result-container">
+    <div className="search-result-container px-8">
       {/* Search bar */}
       <SearchBar />
 

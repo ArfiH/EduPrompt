@@ -395,6 +395,7 @@ footer {
     }
 }
 
+
 @media (max-width: 768px) {
     .video-grid {
         grid-template-columns: repeat(2, 1fr);

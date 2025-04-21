@@ -48,3 +48,36 @@
 .Resizer.disabled:hover {
   border-color: transparent;
 }
+
+/* Add this to your Video.css file */
+
+.mobile-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.mobile-content .video-section,
+.mobile-content .notes-container {
+  width: 100%;
+  margin-bottom: 2rem;
+}
+
+@media (max-width: 767px) {
+  .notes-container {
+    margin-top: 2rem;
+    height: 30rem;
+  }
+
+  .notes-editor {
+    height: 40vh;
+  }
+
+  .video-section {
+    width: 100%;
+  }
+
+  .notes-header input {
+    width: 100%;
+    margin-bottom: 0.5rem;
+  }
+}
