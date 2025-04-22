@@ -6,6 +6,8 @@ import Video from "./pages/Video";
 import Footer from "./component/Footer";
 import SearchResult from "./pages/SearchResult";
 import Test from "./pages/Test";
+import RegisterPage from "./pages/ResgisterPage";
+import LoginPage from "./pages/LoginPage";
 
 function App() {
   return (
@@ -18,6 +20,8 @@ function App() {
             <Route path="video/:id" element={<Video />} />
             <Route path="result/:query" element={<SearchResult />} />
             <Route path="test" element={<Test />} />
+            <Route path="sign-up" element={<RegisterPage />} />
+            <Route path="sign-in" element={<LoginPage />} />
           </Routes>
         </BrowserRouter>
       </main>

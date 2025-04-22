@@ -95,7 +95,7 @@ function Footer() {
           </div>
         </div>
         <div className="copyright">
-          <p>EduLearn</p>
+          <p>EduPrompt</p>
         </div>
       </div>
     </footer>

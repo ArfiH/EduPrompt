@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import homePageSVG from '../home-page-svg.svg'
+// import homePageSVG from '../student_jumping.svg'
 import SearchBar from "../component/SearchBar";
 
 function Home() {

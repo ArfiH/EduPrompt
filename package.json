@@ -24,6 +24,7 @@
     "express": "^4.21.2",
     "groq-sdk": "^0.17.0",
     "lucide-react": "^0.487.0",
+    "mongoose": "^8.13.2",
     "node-fetch": "^3.3.2",
     "protobufjs": "^7.4.0",
     "react": "^19.0.0",

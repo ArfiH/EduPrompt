@@ -24,8 +24,8 @@ function Header() {
             </nav> */}
             
             <div className="auth-buttons">
-                <button className="btn btn-outline">Sign Up</button>
-                <button className="btn btn-primary">Login</button>
+                <button className="btn btn-outline" onClick={() => {window.location.href = "/sign-up"}}>Sign Up</button>
+                <button className="btn btn-primary" onClick={() => {window.location.href = "/sign-in"}}>Login</button>
             </div>
         </div>
     </header>
