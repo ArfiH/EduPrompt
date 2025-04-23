@@ -145,25 +145,25 @@ const extensions = [
 
 const content = `<p>Start writing your notes here...</p>`
 
-export default function TipTapEditor({ onEditorReady }) {
+export default function TipTapEditor({ onEditorReady, initialContent }) {
   const editor = useEditor({
     extensions,
-    content,
-  })
+    content: initialContent || "<p>Start writing your notes here...</p>",
+  });
 
   useEffect(() => {
     if (editor && onEditorReady) {
-      console.log("Editor ready")
-      onEditorReady(editor)
+      console.log("Editor ready");
+      onEditorReady(editor);
     }
-  }, [editor, onEditorReady])
+  }, [editor, onEditorReady]);
 
-  if (!editor) return <div>Loading editor...</div>
+  if (!editor) return <div>Loading editor...</div>;
 
   return (
     <div className="flex flex-col gap-2">
       <MenuBar editor={editor} />
       <EditorContent editor={editor} />
     </div>
-  )
+  );
 }

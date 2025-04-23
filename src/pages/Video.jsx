@@ -112,6 +112,28 @@ function Video() {
     }
   }
 
+  const [initialContent, setInitialContent] = useState("");
+  useEffect(() => {
+    const fetchNote = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const res = await axios.get(`http://localhost:5000/api/notes/${id}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        if (res.data && res.data.content) {
+          setNoteTitle(res.data.title);
+          setInitialContent(res.data.content); // ⬅️ This will go into TipTapEditor
+        }
+      } catch (err) {
+        console.log("No note found or failed to fetch note:", err);
+      }
+    };
+
+    fetchNote();
+  }, [id]);
+
   useEffect(() => {
     getVideoByID(id).then(async (res) => {
       console.log(res);
@@ -151,10 +173,10 @@ function Video() {
           },
         }
       );
-      alert("Note saved successfully!");
+      console.log("Note saved successfully!");
     } catch (error) {
       console.error(error);
-      alert("Failed to save note.");
+      console.log("Failed to save note.");
     }
   };
 
@@ -205,7 +227,10 @@ function Video() {
                   </button>
                 </div>
                 <div className="notes-editor">
-                  <TipTapEditor onEditorReady={setEditor} />
+                  <TipTapEditor
+                    onEditorReady={setEditor}
+                    initialContent={initialContent}
+                  />
                 </div>
               </div>
             </div>
@@ -372,7 +397,10 @@ function Video() {
                   </button>
                 </div>
                 <div className="notes-editor">
-                  <TipTapEditor onEditorReady={setEditor} />
+                  <TipTapEditor
+                    onEditorReady={setEditor}
+                    initialContent={initialContent}
+                  />
                 </div>
               </div>
             </SplitPane>
