@@ -4,9 +4,6 @@ import homePageSVG from '../home-page-svg.svg'
 import SearchBar from "../component/SearchBar";
 
 function Home() {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [filteredVideos, setFilteredVideos] = useState([]);
-  const [featuredVideo, setFeaturedVideo] = useState(null);
 
   return (
     <div className="min-h-screen bg-gray-50">

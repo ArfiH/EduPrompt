@@ -16,17 +16,17 @@ export default function RegisterPage() {
         email,
         password,
       });
-      alert("Registration successful");
-      navigate("/");
+      console.log("Registration successful");
+      navigate("/sign-in");
     } catch (err) {
-      alert("Registration failed");
+      console.log("Registration failed");
       console.log(err);
     }
   };
 
   return (
     <div className="p-8 max-w-md mx-auto">
-      <h1 className="text-2xl mb-4">Register for ThinkBoard</h1>
+      <h1 className="text-2xl mb-4">Register for EduPrompt</h1>
       <input
         type="text"
         placeholder="Name"

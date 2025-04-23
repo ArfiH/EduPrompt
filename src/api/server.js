@@ -6,6 +6,7 @@ import subtitleRoute from './routes/subtitles.js';
 import suggestionRoute from './routes/suggestions.js';
 import authRoutes from "./routes/auth.js"
 import mongoose from 'mongoose'
+import noteRoutes from "./routes/noteRoutes.js";
 
 dotenv.config();
 
@@ -29,6 +30,7 @@ mongoose.connect('mongodb://localhost:27017', {
 app.use('/api/subtitles', subtitleRoute);
 app.use('/api/suggestions', suggestionRoute);
 app.use("/api/auth", authRoutes);
+app.use("/api/notes", noteRoutes);
 
 
 app.listen(PORT, () => {

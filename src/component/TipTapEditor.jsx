@@ -1,14 +1,13 @@
-// Editor.jsx
+// TipTapEditor.jsx
 import "./styles.css"
 
-import { Color } from "@tiptap/extension-color";
-import ListItem from "@tiptap/extension-list-item";
-import TextStyle from "@tiptap/extension-text-style";
-import { EditorProvider, useCurrentEditor } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
-import React from "react";
+import React, { useEffect } from "react"
+import { useEditor, EditorProvider, EditorContent } from "@tiptap/react"
+import StarterKit from "@tiptap/starter-kit"
+import TextStyle from "@tiptap/extension-text-style"
+import ListItem from "@tiptap/extension-list-item"
+import { Color } from "@tiptap/extension-color"
 
-// Lucide Icons
 import {
   Bold,
   Italic,
@@ -27,7 +26,7 @@ import {
   Heading5,
   Heading6,
   PaintBucket,
-} from "lucide-react";
+} from "lucide-react"
 
 const MenuButton = ({ command, active, Icon, disabled, title }) => (
   <button
@@ -40,11 +39,10 @@ const MenuButton = ({ command, active, Icon, disabled, title }) => (
   >
     <Icon className="w-4 h-4" />
   </button>
-);
+)
 
-const MenuBar = () => {
-  const { editor } = useCurrentEditor();
-  if (!editor) return null;
+const MenuBar = ({ editor }) => {
+  if (!editor) return null
 
   return (
     <div className="flex gap-2 flex-wrap p-2 border rounded-md bg-gray-50 overflow-x-auto">
@@ -102,7 +100,7 @@ const MenuBar = () => {
       />
 
       {[1, 2, 3, 4, 5, 6].map((level) => {
-        const HeadingIcons = [Heading1, Heading2, Heading3, Heading4, Heading5, Heading6];
+        const HeadingIcons = [Heading1, Heading2, Heading3, Heading4, Heading5, Heading6]
         return (
           <MenuButton
             key={`H${level}`}
@@ -111,7 +109,7 @@ const MenuBar = () => {
             command={() => editor.chain().focus().toggleHeading({ level }).run()}
             active={editor.isActive("heading", { level })}
           />
-        );
+        )
       })}
 
       <MenuButton
@@ -133,8 +131,8 @@ const MenuBar = () => {
         disabled={!editor.can().chain().focus().redo().run()}
       />
     </div>
-  );
-};
+  )
+}
 
 const extensions = [
   Color.configure({ types: [TextStyle.name, ListItem.name] }),
@@ -143,16 +141,29 @@ const extensions = [
     bulletList: { keepMarks: true, keepAttributes: false },
     orderedList: { keepMarks: true, keepAttributes: false },
   }),
-];
+]
 
-const content = `<p>Start writing your notes here...</p>`;
+const content = `<p>Start writing your notes here...</p>`
 
-export default function Editor() {
+export default function TipTapEditor({ onEditorReady }) {
+  const editor = useEditor({
+    extensions,
+    content,
+  })
+
+  useEffect(() => {
+    if (editor && onEditorReady) {
+      console.log("Editor ready")
+      onEditorReady(editor)
+    }
+  }, [editor, onEditorReady])
+
+  if (!editor) return <div>Loading editor...</div>
+
   return (
-    <EditorProvider
-      slotBefore={<MenuBar />}
-      extensions={extensions}
-      content={content}
-    />
-  );
+    <div className="flex flex-col gap-2">
+      <MenuBar editor={editor} />
+      <EditorContent editor={editor} />
+    </div>
+  )
 }

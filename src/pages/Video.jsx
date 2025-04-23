@@ -10,7 +10,12 @@ import "./Video.css";
 
 import { getVideoByID } from "../api/youtube";
 
-import { getQuizByCaption, getSummary, getHelpByCaption, getFlashcards } from "../api/groq";
+import {
+  getQuizByCaption,
+  getSummary,
+  getHelpByCaption,
+  getFlashcards,
+} from "../api/groq";
 import SplitPane from "react-split-pane";
 
 const getSubtitles = async (videoId) => {
@@ -35,6 +40,7 @@ function Video() {
   const [isLoading, setIsLoading] = useState(true);
   const [caption, setCaption] = useState("");
   const [noteTitle, setNoteTitle] = useState("My Note");
+  const [editor, setEditor] = useState(null);
   const [isMobile, setIsMobile] = useState(false);
 
   // Check if the screen is mobile size
@@ -42,15 +48,15 @@ function Video() {
     const checkIsMobile = () => {
       setIsMobile(window.innerWidth < 768); // Adjust breakpoint as needed
     };
-    
+
     // Check on initial load
     checkIsMobile();
-    
+
     // Add event listener for window resize
-    window.addEventListener('resize', checkIsMobile);
-    
+    window.addEventListener("resize", checkIsMobile);
+
     // Clean up event listener
-    return () => window.removeEventListener('resize', checkIsMobile);
+    return () => window.removeEventListener("resize", checkIsMobile);
   }, []);
 
   // ---------------Extras Active Index values------------------------
@@ -92,13 +98,13 @@ function Video() {
     setExtraActiveIndex(3);
     try {
       let flashcardData = await getFlashcards(title, description, caption);
-      flashcardData = flashcardData.slice(flashcardData.indexOf('['));
+      flashcardData = flashcardData.slice(flashcardData.indexOf("["));
       const jsonString = flashcardData
-      .replace(/([{,]\s*)(\w+):/g, '$1"$2":') // Add quotes around property names
-      .replace(/'/g, '"');                     // Replace single quotes with double quotes
+        .replace(/([{,]\s*)(\w+):/g, '$1"$2":') // Add quotes around property names
+        .replace(/'/g, '"'); // Replace single quotes with double quotes
 
-    // Parse the JSON string to create an array of objects
-    const flashcardsArray = JSON.parse(jsonString);
+      // Parse the JSON string to create an array of objects
+      const flashcardsArray = JSON.parse(jsonString);
       setFlashcards(flashcardsArray);
       console.log(flashcardData);
     } catch (error) {
@@ -121,9 +127,36 @@ function Video() {
     });
   }, []);
 
-  function handleSaveClick() {
-    // Implement save functionality
-  }
+  const handleSaveClick = async () => {
+    if (!editor) {
+      alert("Editor not ready");
+      return;
+    }
+
+    const content = editor.getHTML();
+    const videoId = id; // Replace with dynamic ID if needed
+    const token = localStorage.getItem("token");
+
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/api/notes",
+        {
+          videoId,
+          title: noteTitle,
+          content,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      alert("Note saved successfully!");
+    } catch (error) {
+      console.error(error);
+      alert("Failed to save note.");
+    }
+  };
 
   if (isLoading) return <p>Loading...</p>;
 
@@ -158,14 +191,21 @@ function Video() {
               <div className="notes-container mt-8">
                 <div className="notes-header">
                   <input
-                    type="text"
-                    onChange={(e) => setNoteTitle(e.target.value)}
+                    className="border p-2 mb-4 w-full"
+                    placeholder="Note title"
                     value={noteTitle}
-                  ></input>
-                  <button onClick={handleSaveClick} className="btn btn-outline">Save</button>
+                    onChange={(e) => setNoteTitle(e.target.value)}
+                  />
+
+                  <button
+                    onClick={handleSaveClick}
+                    className="mt-4 bg-blue-600 text-white px-4 py-2 rounded"
+                  >
+                    Save
+                  </button>
                 </div>
                 <div className="notes-editor">
-                  <TipTapEditor />
+                  <TipTapEditor onEditorReady={setEditor} />
                 </div>
               </div>
             </div>
@@ -246,7 +286,10 @@ function Video() {
               <div
                 className="ai-tool-btn mt-4"
                 onClick={() =>
-                  handleLoadFlashcard(video.snippet.title, video.snippet.description)
+                  handleLoadFlashcard(
+                    video.snippet.title,
+                    video.snippet.description
+                  )
                 }
               >
                 <svg
@@ -324,10 +367,12 @@ function Video() {
                     onChange={(e) => setNoteTitle(e.target.value)}
                     value={noteTitle}
                   ></input>
-                  <button onClick={handleSaveClick} className="btn btn-outline">Save</button>
+                  <button onClick={handleSaveClick} className="btn btn-outline">
+                    Save
+                  </button>
                 </div>
                 <div className="notes-editor">
-                  <TipTapEditor />
+                  <TipTapEditor onEditorReady={setEditor} />
                 </div>
               </div>
             </SplitPane>
@@ -409,7 +454,10 @@ function Video() {
             <div
               className="ai-tool-btn mt-4"
               onClick={() =>
-                handleLoadFlashcard(video.snippet.title, video.snippet.description)
+                handleLoadFlashcard(
+                  video.snippet.title,
+                  video.snippet.description
+                )
               }
             >
               <svg

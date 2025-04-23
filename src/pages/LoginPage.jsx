@@ -13,8 +13,10 @@ export default function LoginPage() {
         email,
         password,
       });
+      localStorage.setItem("name", res.data.user.name);
+      console.log(res.data.user.name);
       localStorage.setItem("token", res.data.token);
-      navigate("/");
+      window.location.href = "/";
     } catch (err) {
       alert("Login failed: " + err);
     }
