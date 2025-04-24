@@ -7,6 +7,7 @@ import suggestionRoute from './routes/suggestions.js';
 import authRoutes from "./routes/auth.js"
 import mongoose from 'mongoose'
 import noteRoutes from "./routes/noteRoutes.js";
+import watchRoutes from './routes/watch.js';
 
 dotenv.config();
 
@@ -31,6 +32,8 @@ app.use('/api/subtitles', subtitleRoute);
 app.use('/api/suggestions', suggestionRoute);
 app.use("/api/auth", authRoutes);
 app.use("/api/notes", noteRoutes);
+app.use('/api/watch', watchRoutes);
+
 
 
 app.listen(PORT, () => {

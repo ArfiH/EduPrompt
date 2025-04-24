@@ -7,6 +7,7 @@ import Recommendations from "../component/Recommendations";
 import Extras from "../component/Extras";
 import "./splitPaneStyles.css";
 import "./Video.css";
+import useWatchTracker from "../hooks/watchTracker";
 
 import { getVideoByID } from "../api/youtube";
 
@@ -146,12 +147,50 @@ function Video() {
 
       // send only the first 17000 characters to groq otherwise Token per minute exceeded error will be thrown
       setCaption(caption.substring(0, 17000));
+
+      // add this video to  watch history
+      const token = localStorage.getItem("token");
+      if (!id || !token) return;
+
+      const trackWatch = async () => {
+        try {
+          await axios.post(
+            "http://localhost:5000/api/watch",
+            { videoId: id, title: res.snippet.title },
+            { headers: { Authorization: `Bearer ${token}` } }
+          );
+        } catch (err) {
+          console.error("Failed to update watch history", err);
+        }
+      };
+
+      trackWatch();
     });
   }, []);
 
+  // let token = localStorage.getItem("token");
+  // console.log("Token at Video.jsx is " + token);
+  // useEffect(() => {
+  //   if (!id || !token) return;
+
+  //   const trackWatch = async () => {
+  //     try {
+  //       await axios.post(
+  //         "http://localhost:5000/api/watch",
+  //         { videoId: id, title: video.snippet.title },
+  //         { headers: { Authorization: `Bearer ${token}` } }
+  //       );
+  //     } catch (err) {
+  //       console.error("Failed to update watch history", err);
+  //     }
+  //   };
+
+  //   trackWatch();
+  // }, [id, "video.snippet.title", token]);
+
   const handleSaveClick = async () => {
     if (!editor) {
-      alert("Editor not ready");
+      console.log("Editor not ready");
       return;
     }
 

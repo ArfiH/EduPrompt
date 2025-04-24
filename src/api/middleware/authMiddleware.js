@@ -2,7 +2,6 @@ import jwt from "jsonwebtoken";
 import User from "../models/User.js";
 
 const authMiddleware = async (req, res, next) => {
-    console.log('Recieved auth header' + req.headers.authorization);
   const token = req.headers.authorization?.split(" ")[1];
 
   console.log("Authorization header:", req.headers.authorization); // Log the header to check its value

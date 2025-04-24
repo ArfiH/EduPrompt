@@ -20,6 +20,16 @@ const userSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  watchHistory: [
+    {
+      videoId: String,
+      title: String,
+      watchedAt: {
+        type: Date,
+        default: Date.now,
+      },
+    },
+  ],
 }, { timestamps: true });
 
 export default mongoose.model("User", userSchema);
