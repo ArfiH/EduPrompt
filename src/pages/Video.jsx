@@ -99,7 +99,7 @@ function Video() {
     setExtraActiveIndex(3);
     try {
       let flashcardData = await getFlashcards(title, description, caption);
-      flashcardData = flashcardData.slice(flashcardData.indexOf("["));
+      flashcardData = flashcardData.slice(flashcardData.indexOf("["), flashcardData.indexOf("]"));
       const jsonString = flashcardData
         .replace(/([{,]\s*)(\w+):/g, '$1"$2":') // Add quotes around property names
         .replace(/'/g, '"'); // Replace single quotes with double quotes

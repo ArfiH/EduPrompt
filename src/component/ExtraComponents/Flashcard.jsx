@@ -5,7 +5,6 @@ export default function FlashcardDeck({ flashcards = [] }) {
   const [isFlipped, setIsFlipped] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
   
-  useEffect(() => console.log(typeof flashcards), []);
   
   // Handle when there are no flashcards
   if (flashcards.length === 0) {

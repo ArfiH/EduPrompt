@@ -21,6 +21,7 @@ function Home() {
           },
         });
         const data = await res.json();
+        console.log(data);
         setWatchHistory(data);
       } catch (err) {
         console.error("Error fetching watch history:", err);
@@ -38,10 +39,9 @@ function Home() {
             Authorization: `Bearer ${token}`,
           },
         });
-        const text = await res.text(); // read raw text
-        console.log("Raw response:", text);
+        const text = await res.text();
 
-        const data = JSON.parse(text); // manually parse
+        const data = JSON.parse(text);
         setNotes(data);
       } catch (err) {
         console.error("Failed to fetch notes:", err);
@@ -131,7 +131,7 @@ function Home() {
           {watchHistory.length === 0 ? <p className="p-4">Watch history is empty</p> : <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6">
             {watchHistory.map((video) => (
               <a
-                key={video.videoId}
+                key={video._id}
                 href={`/video/${video.videoId}`}
                 target="_blank"
                 rel="noopener noreferrer"
