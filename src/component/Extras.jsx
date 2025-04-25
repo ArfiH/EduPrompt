@@ -1,11 +1,10 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import CustomQuiz from "./ExtraComponents/CustomQuiz";
 import Summary from "./ExtraComponents/Summary";
 import GroqChat from "./ExtraComponents/GroqChat";
 import Flashcard from "./ExtraComponents/Flashcard";
 
-function Extras({ index, setIndex, quiz, summary, help, flashcards}) {
-  
+function Extras({ index, setIndex, quiz, summary, help, flashcards }) {
   return (
     <div className="extras-container mt-8 relative">
       <ul className="flex border-b">
@@ -60,18 +59,31 @@ function Extras({ index, setIndex, quiz, summary, help, flashcards}) {
       </ul>
 
       <div className="bg-white p-4">
-        {index === 0 && summary?.length > 0 ? (
-          <Summary summary={summary} />
-        ) : null}
-        {index === 1 && quiz?.length > 0 ? (
-          <CustomQuiz quiz={quiz} />
-        ) : null}
-        {index === 2 ? (
-          <GroqChat help={help} />
-        ) : null}
-        {index === 3 && flashcards?.length > 0 ? (
-          <Flashcard flashcards={flashcards} />
-        ) : null}
+        {index === 0 &&
+          (summary?.length > 0 ? (
+            <Summary summary={summary} />
+          ) : (
+            <div className="text-center text-gray-500 p-4">
+              <p>Click AI Summary</p>
+            </div>
+          ))}
+        {index === 1 &&
+          (quiz?.length > 0 ? (
+            <CustomQuiz quiz={quiz} />
+          ) : (
+            <div className="text-center text-gray-500 p-4">
+              <p>Click AI Quiz</p>
+            </div>
+          ))}
+        {index === 2 ? <GroqChat help={help} /> : null}
+        {index === 3 &&
+          (flashcards?.length > 0 ? (
+            <Flashcard flashcards={flashcards} />
+          ) : (
+            <div className="text-center text-gray-500 p-4">
+              <p>Click AI Flashcards</p>
+            </div>
+          ))}
       </div>
     </div>
   );

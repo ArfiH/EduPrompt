@@ -55,4 +55,15 @@ router.get("/:videoId", authMiddleware, async (req, res) => {
   }
 });
 
+// Get all notes for the logged-in user
+router.get("/", authMiddleware, async (req, res) => {
+  try {
+    const notes = await Note.find({ user: req.user.id });
+    res.status(200).json(notes);
+  } catch (err) {
+    console.error("Error fetching notes:", err);
+    res.status(500).json({ error: "Failed to fetch notes" });
+  }
+});
+
 export default router;
