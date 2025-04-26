@@ -12,7 +12,11 @@ import watchRoutes from './routes/watch.js';
 dotenv.config();
 
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: "*", // Replace "*" with your frontend URL in production
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+}));
 app.use(express.json());
 
 const PORT = process.env.VITE_SERVER_PORT || 5000;
